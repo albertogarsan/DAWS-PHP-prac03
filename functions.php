@@ -3,25 +3,44 @@ declare(strict_types=1);
 
 function checkContactDate(string $date): bool{
 
+    //Check if the param is a valid date
+    // With explode we can split the input user date in a array of strings
+    $date_array = explode("-", $date); //Output expected: ["2023", "09", "29"]
+
+    // Check if the array has 3 elements
+    if (sizeof($date_array) !== 3){
+        return false;
+    }
+
+    //Assign each position value to a variable. Remember they are strings.
+    $strYear = $date_array[0];
+    $strMonth = $date_array[1];
+    $strDay = $date_array[2];
+
+    //Check if any of them is not numeric.
+    if (!is_numeric($strYear) || !is_numeric($strMonth) || !is_numeric($strDay)){
+        return false;
+    }
+
     //Convert $date (string) in a timestamp (int) -> string to integer
-    $timestamp = strtotime($date);
+    //$timestamp = strtotime($date);
     // Convert the integer $timestamp to object or associative array -> key & value
-    $dateObj = getdate($timestamp);
+    //$dateObj = getdate($timestamp);
 
     // https://www.php.net/manual/es/function.getdate
-    // Get the year 1900-2023
-    $year = $dateObj["year"];
-    // Get the month 1-12
-    $month = $dateObj["mon"];
-    // Get the day 1-31
-    $day = $dateObj["mday"];
+    // Get the year casting string to int
+    $year = (int)$strYear;
+    // Get the month casting string to int
+    $month = (int)$strMonth;
+    // Get the day casting string to int
+    $day = (int)$strDay;
 
-    //Check if year is in range
+    //Check if year is in range 1900-2100
     if ($year<1900 || $year>2100) {
         return false;
     }
 
-    //Check if month is in range
+    //Check if month is in range 1-12
     if ($month<1 || $month>12) {
         return false;
     }
@@ -64,8 +83,8 @@ function checkContactDate(string $date): bool{
  * @return bool 
  */
 function leapYear(int $year): bool{
-    //is leap year
-    if ($year%4 === 0) {
+    //is leap year. Take into account that a year divisible by 100 is not a leap year unless it is divisible by 400
+    if ($year%4 === 0 && $year%100 !== 0 || $year%400 === 0) {
         return true;
     } 
     //not leap year
@@ -101,7 +120,7 @@ function checkBirthday(string $birthday) : int|null{
     $dayOfYearToday = date("z", $todayDate);
 
     //Do the rest of the days
-    $differenceOfDays = $dayOfYearToday - $dayOfYearBirthday;
+    $differenceOfDays = $dayOfYearBirthday - $dayOfYearToday;
 
     //Check if the difference of days is less than 0, revert the days until next birthday
     if ($differenceOfDays < 0) {$differenceOfDays += 365;}

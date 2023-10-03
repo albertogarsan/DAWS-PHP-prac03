@@ -82,7 +82,6 @@ function leapYear2(int $year): bool {
     return false;
 }
 
-
 function checkBirthday(string $birthday) : int|null{
 
     //First, check if the date is valid with the function above
@@ -110,6 +109,78 @@ function checkBirthday(string $birthday) : int|null{
     return $differenceOfDays;
 
 }
+
+// In order to make optional ?array $header we must asign default null value
+function showStudentsTable(array $data, ?array $header = null){
+    //Through echo tag build html structure as we want.
+     echo "<table>";
+     echo "<thead>";
+     echo "<tr>";
+     //Check if the number of args we put into the function is one or two
+     if (func_num_args() === 2){
+         echo "<th>".$header[0]."</th>";
+         echo "<th>".$header[1]."</th>";
+         echo "<th>".$header[2]."</th>";
+     } else {
+         echo "<th>ID</th>";
+         echo "<th>Name</th>";
+         echo "<th>Grade</th>";
+     }
+     echo "</tr>";
+     echo "</thead>";
+     echo "<tbody>";
+     //Per each student row we print their data into html string tags
+     foreach ($data as $student) {
+         echo "<tr>";
+         echo "<td>" . $student["id"] . "</td>";
+         echo "<td>" . $student["name"] . "</td>";
+         if ($student["grade"] < 5) {
+             echo "<td class='grade-ko'>" . $student["grade"] . "</td>";
+         } else {
+             echo "<td class='grade-ok'>" . $student["grade"] . "</td>";
+         }
+         echo "</tr>";
+     }
+     echo "</tbody>";
+     echo "</table>";
+ }
+
+ function showTable(array $data, ?array $header = null){
+    //Through echo tag build html structure as we want.
+     echo "<table>";
+     echo "<thead>";
+     echo "<tr>";
+     //Check if the number of args we put into the function is one or two
+     if (func_num_args() === 2){
+        foreach ($header as $value){
+            echo "<th>".$value."</th>";
+        }
+     } else {
+        //Accessing an interior element of the array
+        $firstItem = $data[0];
+        foreach ($firstItem as $key => $value){
+            echo "<th>".$key."</th>";
+        }
+     }
+     echo "</tr>";
+     echo "</thead>";
+     echo "<tbody>";
+
+
+     //Per each student row we print their data into html string tags
+     foreach ($data as $item) {
+        //Transform associative array to a indexed array
+        $values = array_values($item);
+        echo "<tr>";
+        //Iterate over indexed array to get the value for each cell of the row
+        foreach ($values as $value){
+            echo "<td>".$value."</td>";
+        }
+        echo "</tr>";
+     }
+     echo "</tbody>";
+     echo "</table>";
+ }
 
 ?>
 
